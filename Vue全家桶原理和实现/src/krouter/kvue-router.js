@@ -9,15 +9,16 @@ class VueRouter {
     this.$options = options;
 
     // 2.需要响应式的current
-    const initial = window.location.hash.slice(1) || '/'
-    Vue.util.defineReactive(this, 'current', initial)
+    // 在渲染函数中使用到的响应式数据 就会发生render
+    const initial = window.location.hash.slice(1) || "/";
+    Vue.util.defineReactive(this, "current", initial);
 
-    // 2.监控url变化
-    window.addEventListener("hashchange", this.onHashChange.bind(this));
+    // 3.监控url变化
+    window.addEventListener("hashchange", this.onHashChange.bind(this)); // this默认指向window
   }
 
   onHashChange() {
-    this.current = window.location.hash.slice(1);
+    this.current = window.location.hash.slice(1); // 获取hash值
   }
 }
 
@@ -30,7 +31,7 @@ VueRouter.install = function(_Vue) {
     beforeCreate() {
       // 任务1：挂载$router
       // 以后每个组件都会调用该方法
-      if (this.$options.router) {
+      if (this.$options.router) { //根组件
         // 此时的上下文this是当前组件实例
         Vue.prototype.$router = this.$options.router;
       }
@@ -45,23 +46,25 @@ VueRouter.install = function(_Vue) {
         required: true,
       },
     },
+    /*运行时模式不能使用template方式*/
     render(h) {
       // <router-link to="#/about">abc</router-link>
       // <a href="#/about">abc</a>
-      // return <a href={"#" + this.to}>{this.$slots.default}</a>;
+      // return <a href={"#" + this.to}>{this.$slots.default}</a>; // JSX
+      /*默认插槽*/
       return h("a", { attrs: { href: "#" + this.to } }, this.$slots.default);
     },
   });
-  
+
   Vue.component("router-view", {
     render(h) {
       // 获取current
-      let Component = null
+      let Component = null;
       const route = this.$router.$options.routes.find(
         (route) => route.path === this.$router.current
       );
       if (route) {
-        Component = route.component
+        Component = route.component;
       }
       return h(Component);
     },

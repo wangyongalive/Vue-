@@ -15,7 +15,7 @@ export default new Vuex.Store({
   actions: {
     add({commit}) {
       setTimeout(() => {
-        commit('add')
+        commit('add') // this指向window
       }, 1000);
     }
   },

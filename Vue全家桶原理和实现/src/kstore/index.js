@@ -1,24 +1,28 @@
-import Vue from 'vue'
-import Vuex from './kvuex'
+import Vue from "vue";
+import Vuex from "./kvuex";
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    counter: 1
+    counter: 1,
   },
   mutations: {
     add(state) {
-      state.counter++
-    }
+      state.counter++;
+    },
   },
   actions: {
-    add({commit}) {
+    add({ commit }) {
       setTimeout(() => {
-        commit('add') // this指向window
+        commit("add"); // this指向window
       }, 1000);
-    }
+    },
   },
-  modules: {
-  }
-})
+  getters: {
+    doubleCounter: (state) => {
+      return state.counter * 2;
+    },
+  },
+  modules: {},
+});
